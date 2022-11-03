@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Stream;
@@ -196,6 +197,32 @@ public class DaoFileImpl implements DaoFileInterface {
                     "LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
         }
         out.println(newOrderEntry);
+        out.flush();
+    }
+
+    public void writeAllOrders(List<Order> orderList) throws PersistenceException {
+        Order order = orderList.get(0);
+        String basic = order.getOrderDate().format(DateTimeFormatter.BASIC_ISO_DATE);
+        String year = basic.substring(0,4);
+        String monthDate = basic.substring(4,8);
+        String fileName = "Orders_" +  monthDate + year;
+        File file = new File("src/Orders/" + fileName + ".txt");
+        PrintWriter out;
+        try {
+            /* Setting the second parameter to "true" opens the audit file in append mode ensures each entry will be
+             * appended to the file rather than overwriting what was there before
+             */
+            out = new PrintWriter(new FileWriter(file, false));
+        } catch (Exception e) {
+            throw new PersistenceException("Could not persist audit information", e);
+        }
+
+        out.println("OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot," +
+                "LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
+        for (Order currentOrder : orderList) {
+            String updatedEntry = marshalOrder(currentOrder);
+            out.println(updatedEntry);
+        }
         out.flush();
     }
 

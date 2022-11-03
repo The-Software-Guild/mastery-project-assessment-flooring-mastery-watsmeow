@@ -6,7 +6,6 @@ import com.watsmeow.dto.Product;
 import com.watsmeow.dto.TaxInfo;
 import com.watsmeow.service.ServiceInterface;
 import com.watsmeow.service.ValidationException;
-import com.watsmeow.view.IOException;
 import com.watsmeow.view.View;
 
 import java.time.LocalDate;
@@ -65,7 +64,7 @@ public class Controller {
         return view.printMenuGetUserSelection();
     }
 
-    private void displayOrdersOfGivenDate() throws PersistenceException, ValidationException {
+    private void displayOrdersOfGivenDate() throws PersistenceException {
         try {
             LocalDate date = view.getOrderDate();
             List<Order> ordersList = service.getOrdersByDate(date);
@@ -84,13 +83,22 @@ public class Controller {
         List<TaxInfo> taxInfoList = service.getAllTaxInfo();
         Order order = view.getNewOrderInfo(productList, taxInfoList);
         order = service.generateFullOrder(order);
-        if (view.confirmNewOrderBanner(order)) {
+        if (view.confirmOrderInformationBanner(order)) {
             service.saveOrder(order);
         }
+        view.orderSuccessfullyPlacedBanner();
     }
 
-    private void editOrder() {
-
+    private void editOrder() throws PersistenceException, ValidationException {
+        List<Product> productList = service.getAllProducts();
+        List<TaxInfo> taxInfoList = service.getAllTaxInfo();
+        Order order = service.getOrderToEditOrder(view.getOrderDate(), view.getOrderNumber());
+        order = view.editExistingOrder(order, productList, taxInfoList);
+        order = service.generateFullOrder(order);
+        if (view.confirmOrderInformationBanner(order)) {
+            service.editOrder(order);
+        }
+        view.orderSuccessfullyEditedBanner();
     }
 
     private void removeOrder() {

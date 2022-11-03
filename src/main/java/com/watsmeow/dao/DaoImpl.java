@@ -6,6 +6,7 @@ import com.watsmeow.dto.TaxInfo;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DaoImpl implements DaoInterface {
 
@@ -49,13 +50,13 @@ public class DaoImpl implements DaoInterface {
     @Override
     public Product getProduct(String productType) throws PersistenceException {
         products = fio.loadProducts(PRODUCTS_FILE);
-        return products.get(productType);
+        return products.get(productType.toLowerCase());
     }
 
     @Override
     public TaxInfo getTaxInfo(String state) throws PersistenceException {
         taxinfo = fio.loadTaxInfo(TAXES_FILE);
-        return taxinfo.get(state);
+        return taxinfo.get(state.toLowerCase());
     }
 
     public Set<Integer> getOrderNumbers() {
@@ -66,4 +67,12 @@ public class DaoImpl implements DaoInterface {
         orders.put(order.getOrderNumber(), order);
         fio.writeOrder(order);
     }
+    public void updateExistingOrder(Order order) throws PersistenceException {
+        orders.put(order.getOrderNumber(), order);
+        fio.writeAllOrders(orders.values()
+                .stream()
+                .filter(order1 -> order1.getOrderDate().equals(order.getOrderDate()))
+                .collect(Collectors.toList()));
+    }
+
 }

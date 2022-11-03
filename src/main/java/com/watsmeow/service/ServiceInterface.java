@@ -19,4 +19,8 @@ public interface ServiceInterface {
     List<Order> getOrdersByDate(LocalDate date) throws PersistenceException;
 
     List<TaxInfo> getAllTaxInfo() throws PersistenceException;
+
+    Order getOrderToEditOrder(LocalDate date, int orderNumber) throws PersistenceException;
+
+    void editOrder(Order order) throws PersistenceException;
 }

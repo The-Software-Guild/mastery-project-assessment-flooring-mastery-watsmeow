@@ -6,6 +6,7 @@ import com.watsmeow.dto.TaxInfo;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 public interface DaoFileInterface {
@@ -28,4 +29,6 @@ public interface DaoFileInterface {
     String marshalOrder(Order order);
 
     void writeOrder(Order order) throws PersistenceException;
+
+    void writeAllOrders(List<Order> orderList) throws PersistenceException;
 }

@@ -22,4 +22,6 @@ public interface DaoInterface  {
     void createNewOrder(Order order) throws PersistenceException;
 
     List<TaxInfo> getAllTaxInfo() throws PersistenceException;
+
+    void updateExistingOrder(Order order) throws PersistenceException;
 }

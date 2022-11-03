@@ -8,6 +8,7 @@ import com.watsmeow.dto.Product;
 import com.watsmeow.dto.TaxInfo;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
@@ -53,7 +54,8 @@ public class ServiceImpl implements ServiceInterface {
         order.setCostPerSqFt(product.getCostPerSqFt());
         BigDecimal materialCost = order.getArea().multiply(product.getCostPerSqFt()).setScale(2);
         BigDecimal laborCost = order.getArea().multiply(product.getLaborCostPerSqFt()).setScale(2);
-        BigDecimal tax = materialCost.add(laborCost).multiply(taxInfo.getTaxRate().divide(new BigDecimal(100))).setScale(2);
+        BigDecimal tax = materialCost.add(laborCost).multiply(taxInfo.getTaxRate()
+                .divide(new BigDecimal(100))).setScale(2, RoundingMode.HALF_UP);
         BigDecimal total = materialCost.add(laborCost.add(tax).setScale(2));
         order.setLaborCostPerSqFt(product.getLaborCostPerSqFt());
         order.setMaterialCost(materialCost);
@@ -63,12 +65,25 @@ public class ServiceImpl implements ServiceInterface {
         return order;
     }
 
+    public Order getOrderToEditOrder(LocalDate date, int orderNumber) throws PersistenceException {
+        List<Order> orderList = getOrdersByDate(date);
+        Order singleOrder = orderList.stream()
+                .filter(order -> order.getOrderNumber() == orderNumber)
+                .findFirst()
+                .get();
+        return singleOrder;
+    }
+
     public void saveOrder(Order order) throws PersistenceException {
         int orderNumber = dao.getOrderNumbers()
                 .stream()
                 .max(Integer::compare).get() + 1;
         order.setOrderNumber(orderNumber);
         dao.createNewOrder(order);
+    }
+
+    public void editOrder(Order order) throws PersistenceException {
+        dao.updateExistingOrder(order);
     }
 
 }

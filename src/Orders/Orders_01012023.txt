@@ -1,0 +1,2 @@
+OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
+7,Bob,Washington,9.25,Tile,200,3.50,4.15,700.00,830.00,141.53,1671.53

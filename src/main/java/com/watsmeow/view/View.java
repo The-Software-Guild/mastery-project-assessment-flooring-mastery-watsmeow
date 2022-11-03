@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class View {
 
@@ -33,7 +34,7 @@ public class View {
 
     public LocalDate getOrderDate() {
         try {
-            return io.readDate("Enter the date of the orders you wish to view in MM/dd/yyyy format");
+            return io.readDate("Enter the date of the order(s) you wish to view in MM/dd/yyyy format");
         } catch (DateTimeParseException e) {
             throw e;
         }
@@ -88,7 +89,45 @@ public class View {
         }
     }
 
-    public Order getNewOrderInfo(List<Product> productList, List<TaxInfo> taxInfoList) {
+    public void editFieldBanner() {
+        io.print("Edit this field by entering in update information here, " +
+                "or press enter to continue on to the next field");
+    }
+
+    public int getOrderNumber() {
+        return io.readNum("Enter the order number");
+    }
+
+    public Order editExistingOrder(Order order, List<Product> productList, List<TaxInfo> taxInfoList) {
+        String customerName = String.format("Customer Name: %s",
+                order.getCustomerName());
+            io.print(customerName);
+        String newName = io.readString("To change the customer name, " +
+                "enter a new name here or hit enter if you do not wish to update");
+
+        String state = String.format("State: %s",
+                order.getState());
+        io.print(state);
+        String newState = validateState(taxInfoList, false);
+
+        String product = String.format("Product: %s",
+                order.getProductType());
+        io.print(product);
+        String newProduct = validateProductName(productList, false);
+
+        String area = String.format("Area: %s",
+                order.getArea());
+        io.print(area);
+        BigDecimal newArea = validateAreaSize(false);
+        order.setCustomerName(newName);
+        order.setState(newState);
+        order.setProductType(newProduct);
+        order.setArea(newArea);
+        displayOrderInformation(order);
+        return order;
+    }
+
+    public LocalDate validateFutureDate() {
         LocalDate orderDate;
         do {
             try {
@@ -101,32 +140,63 @@ public class View {
                 orderDate = LocalDate.now().minusDays(1);
             }
         } while (orderDate.isBefore(LocalDate.now(ZoneId.of("America/Montreal"))));
-        String customerName = io.readString("Enter your name");
+        return orderDate;
+    }
 
-        // do while and try catch for state name to catch if state info is not available
+    public String validateState(List<TaxInfo> taxInfoList, boolean isCreate) {
         displayTaxInfoList(taxInfoList);
+        List<String> stateNames = taxInfoList
+                .stream()
+                .map(taxInfo -> taxInfo.getStateName().toLowerCase())
+                .collect(Collectors.toList());
         String state;
         do {
             state = io.readString("Enter the state where the order will be installed");
-            if (!taxInfoList.contains(state)) {
+            if ((!isCreate && !state.equals("")) && !stateNames.contains(state.toLowerCase())) {
                 io.print("Service unavailable in that state, choose a state from the list");
             }
-        } while (!taxInfoList.contains(state));
+        } while ((!isCreate && !state.equals("")) && !stateNames.contains(state.toLowerCase()));
+        return state;
+    }
 
-
-
+    public String validateProductName(List<Product> productList, boolean isCreate) {
         displayProductList(productList);
-        // do while and try catch for product name to catch if product info is not available
-        String productType = io.readString("Enter the product name");
+        List<String> productNames = productList
+                .stream()
+                .map(productName -> productName.getProductType().toLowerCase())
+                .collect(Collectors.toList());
+        String productType;
+        do {
+            productType = io.readString("Enter the product name");
+            if ((!isCreate && !productNames.equals("")) && !productNames.contains(productType.toLowerCase())) {
+                io.print("Only products from the list are available for purchase");
+            }
+        } while ((!isCreate && !productNames.equals("")) && !productNames.contains(productType.toLowerCase()));
+        return productType;
+    }
 
-        // do while and try catch for area to catch if area is not big enough
-        BigDecimal area = io.readArea("Enter the project area in square feet, min order 100 sq ft.");
+    public BigDecimal validateAreaSize(boolean isCreate) {
+        BigDecimal area;
+        do {
+            area = io.readArea("Enter the project area in square feet, min order 100 sq ft");
+            if ((!isCreate && !area.equals("")) && area.compareTo(BigDecimal.valueOf(100)) < -1) {
+                io.print("Your order must be larger than 100 sq ft");
+            }
+        } while ((!isCreate && !area.equals("")) &&  area.compareTo(BigDecimal.valueOf(100)) <= -1);
+        return area;
+    }
+    public Order getNewOrderInfo(List<Product> productList, List<TaxInfo> taxInfoList) {
+        LocalDate orderDate = validateFutureDate();
+        String customerName = io.readString("Enter your name");
+        String state = validateState(taxInfoList, true);
+        String productType = validateProductName(productList, true);
+        BigDecimal area = validateAreaSize(true);
         Order newOrder = new Order(customerName, state, productType, area);
         newOrder.setOrderDate(orderDate);
         return newOrder;
     }
 
-    public boolean confirmNewOrderBanner(Order order) {
+    public boolean confirmOrderInformationBanner(Order order) {
         String orderInfo = displayOrderInformation(order);
             io.print(orderInfo);
         String userInput = io.readString("To confirm this order press Y, to cancel press N");
@@ -137,7 +207,12 @@ public class View {
         }
     }
 
-
+    public void orderSuccessfullyEditedBanner() {
+        io.print("Order edited successfully");
+    }
+    public void orderSuccessfullyPlacedBanner() {
+        io.print("Order placed successfully");
+    }
     public void unknownCommandBanner() {
         io.print("Unknown command");
     }

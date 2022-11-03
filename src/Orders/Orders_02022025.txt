@@ -1,0 +1,2 @@
+OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
+6,andrea,texas,4.45,Wood,200,5.15,4.75,1030.00,950.00,88.11,2068.11
