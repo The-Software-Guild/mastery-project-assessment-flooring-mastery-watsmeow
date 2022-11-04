@@ -11,6 +11,7 @@ import com.watsmeow.view.View;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Optional;
 
 public class Controller {
 
@@ -27,37 +28,41 @@ public class Controller {
         boolean keepRunning = true;
         int userSelection = 0;
 
-        // Places the running into a try and catch so that if there is an error it alerts properly
-        while (keepRunning) {
+        try {
+            // Places the running into a try and catch so that if there is an error it alerts properly
+            while (keepRunning) {
 
-            userSelection = getUserMenuSelection();
+                userSelection = getUserMenuSelection();
 
-            // Switch statement calls methods that run based on user selection
-            switch (userSelection) {
-                case 1:
-                    displayOrdersOfGivenDate();
-                    break;
-                case 2:
-                    addOrder();
-                    break;
-                case 3:
-                    editOrder();
-                    break;
-                case 4:
-                    removeOrder();
-                    break;
-                case 5:
+                // Switch statement calls methods that run based on user selection
+                switch (userSelection) {
+                    case 1:
+                        displayOrdersOfGivenDate();
+                        break;
+                    case 2:
+                        addOrder();
+                        break;
+                    case 3:
+                        editOrder();
+                        break;
+                    case 4:
+                        removeOrder();
+                        break;
+                    case 5:
 //                        exportData();
-                    break;
-                case 6:
-                    keepRunning = false;
-                    break;
-                default:
-                    unknownCommand();
+                        break;
+                    case 6:
+                        keepRunning = false;
+                        break;
+                    default:
+                        unknownCommand();
+                }
             }
+            // Display the exit message if user exits program
+            exitMessage();
+        } catch (ValidationException e) {
+            view.invalidInputBanner();
         }
-        // Display the exit message if user exits program
-        exitMessage();
     }
 
     private int getUserMenuSelection() {
@@ -86,23 +91,41 @@ public class Controller {
         if (view.confirmOrderInformationBanner(order)) {
             service.saveOrder(order);
         }
-        view.orderSuccessfullyPlacedBanner();
+        view.actionCompletedSuccessfullyBanner();
     }
 
     private void editOrder() throws PersistenceException, ValidationException {
         List<Product> productList = service.getAllProducts();
         List<TaxInfo> taxInfoList = service.getAllTaxInfo();
-        Order order = service.getOrderToEditOrder(view.getOrderDate(), view.getOrderNumber());
-        order = view.editExistingOrder(order, productList, taxInfoList);
-        order = service.generateFullOrder(order);
-        if (view.confirmOrderInformationBanner(order)) {
-            service.editOrder(order);
+        view.editFieldBanner();
+        Optional<Order> optionalOrder = service.getOrderToEditOrDeleteOrder(view.getOrderDate(), view.getOrderNumber());
+        if (optionalOrder.isEmpty()) {
+            view.ordersDoNotExistBanner();
+            editOrder();
+        } else {
+            Order order = optionalOrder.get();
+            order = view.editExistingOrder(order, productList, taxInfoList);
+            order = service.generateFullOrder(order);
+            view.displayOrderInformation(order);
+            if (view.confirmOrderInformationBanner(order)) {
+                service.editOrder(order);
+            }
+            view.actionCompletedSuccessfullyBanner();
         }
-        view.orderSuccessfullyEditedBanner();
     }
 
-    private void removeOrder() {
-
+    private void removeOrder() throws PersistenceException {
+        Optional<Order> optionalOrder = service.getOrderToEditOrDeleteOrder(view.getOrderDate(), view.getOrderNumber());
+        if (optionalOrder.isEmpty()) {
+            view.ordersDoNotExistBanner();
+            removeOrder();
+        } else {
+            Order order = optionalOrder.get();
+            view.displayOrderInformation(order);
+            if (view.confirmOrderInformationBanner(order)) {
+                service.deleteOrder(order);
+            }
+        }
     }
 
     private void unknownCommand() {

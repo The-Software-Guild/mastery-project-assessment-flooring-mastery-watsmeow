@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ServiceImpl implements ServiceInterface {
@@ -30,21 +31,16 @@ public class ServiceImpl implements ServiceInterface {
         return dao.getAllProducts();
     }
 
+    public List<Order> getOrdersByDate(LocalDate date) throws PersistenceException {
+        return dao.getAllOrders()
+                .stream()
+                .filter(order -> order.getOrderDate().equals(date))
+                .collect(Collectors.toList());
+    }
+
     public List<TaxInfo> getAllTaxInfo() throws PersistenceException {
         return dao.getAllTaxInfo();
     }
-
-    public List<Order> getOrdersByDate(LocalDate date) throws PersistenceException {
-        return dao.getAllOrders()
-            .stream()
-            .filter(order -> order.getOrderDate().equals(date))
-            .collect(Collectors.toList());
-    }
-
-    public Product getProduct(Order order) throws PersistenceException {
-        return dao.getProduct(order.getProductType());
-    }
-
 
     public Order generateFullOrder(Order order) throws PersistenceException {
         Product product = dao.getProduct(order.getProductType());
@@ -65,13 +61,20 @@ public class ServiceImpl implements ServiceInterface {
         return order;
     }
 
-    public Order getOrderToEditOrder(LocalDate date, int orderNumber) throws PersistenceException {
+    public Optional<Order> getOrderToEditOrDeleteOrder(LocalDate date, int orderNumber) throws PersistenceException {
         List<Order> orderList = getOrdersByDate(date);
-        Order singleOrder = orderList.stream()
+        Optional<Order> singleOrder = orderList.stream()
                 .filter(order -> order.getOrderNumber() == orderNumber)
-                .findFirst()
-                .get();
+                .findFirst();
         return singleOrder;
+    }
+
+    public void editOrder(Order order) throws PersistenceException {
+        dao.updateExistingOrder(order);
+    }
+
+    public void deleteOrder(Order order) throws PersistenceException {
+        dao.deleteExistingOrder(order);
     }
 
     public void saveOrder(Order order) throws PersistenceException {
@@ -81,9 +84,4 @@ public class ServiceImpl implements ServiceInterface {
         order.setOrderNumber(orderNumber);
         dao.createNewOrder(order);
     }
-
-    public void editOrder(Order order) throws PersistenceException {
-        dao.updateExistingOrder(order);
-    }
-
 }

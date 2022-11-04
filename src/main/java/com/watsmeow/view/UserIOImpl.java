@@ -26,7 +26,6 @@ public class UserIOImpl implements UserIO {
     public BigDecimal readArea(String msg) {
         Scanner scanner = new Scanner(System.in);
         System.out.println(msg);
-        // need to validate user input is double
         double userInput = scanner.nextDouble();
         BigDecimal userAreaInput = new BigDecimal(userInput);
         userAreaInput.setScale(2, RoundingMode.HALF_UP);
@@ -57,7 +56,7 @@ public class UserIOImpl implements UserIO {
     public int readSelection(String msg, int min, int max) {
         Scanner scanner = new Scanner(System.in);
         System.out.println(msg);
-        int userSelection = scanner.nextInt();
+        int userSelection = min -1;
         while (userSelection < min || userSelection > max) {
             try {
                 userSelection = scanner.nextInt();

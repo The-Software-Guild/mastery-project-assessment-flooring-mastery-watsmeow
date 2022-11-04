@@ -26,19 +26,12 @@ public class DaoFileImpl implements DaoFileInterface {
         BigDecimal bigDec = BigDecimal.valueOf(Double.valueOf(dub));
         return bigDec.setScale(2, RoundingMode.HALF_UP);
     }
+
     public Product unmarshalProduct(String productAsText) {
         String[] productTokens = productAsText.split(DELIMITER);
         String productType = productTokens[0];
         BigDecimal costPerSqFt = doubleToBigDec(productTokens[1]);
         BigDecimal laborCostPerSqFt = doubleToBigDec(productTokens[2]);
-
-    //        double costPerSqFt = Double.parseDouble(productTokens[1]);
-    //        BigDecimal pricePerSqFt = new BigDecimal(costPerSqFt);
-    //        pricePerSqFt.setScale(2, RoundingMode.HALF_UP);
-
-    //        double laborCostPerSqFt = Double.parseDouble(productTokens[2]);
-    //        BigDecimal laborPerSqFt = new BigDecimal(laborCostPerSqFt);
-    //        laborPerSqFt.setScale(2, RoundingMode.HALF_UP);
         Product productFromFile = new Product(productType, costPerSqFt, laborCostPerSqFt);
         return productFromFile;
     }
@@ -48,10 +41,6 @@ public class DaoFileImpl implements DaoFileInterface {
         String stateAbbrev = taxTokens[0];
         String stateName = taxTokens[1];
         BigDecimal taxRate = doubleToBigDec(taxTokens[2]);
-
-    //        double stateTax = Double.parseDouble(taxTokens[2]);
-    //        BigDecimal taxRate = new BigDecimal(stateTax);
-    //        taxRate.setScale(2, RoundingMode.HALF_UP);
         TaxInfo infoFromFile = new TaxInfo(stateAbbrev, stateName, taxRate);
         return infoFromFile;
     }
@@ -62,9 +51,6 @@ public class DaoFileImpl implements DaoFileInterface {
         String customerName = orderTokens[1];
         String state = orderTokens[2];
         BigDecimal taxRate = doubleToBigDec(orderTokens[3]);
-    /*        double stateTax = Double.parseDouble(orderTokens[4]);
-            BigDecimal taxRate = new BigDecimal(stateTax);
-            taxRate.setScale(2, RoundingMode.HALF_UP);*/
         String productType = orderTokens[4];
         BigDecimal area = doubleToBigDec(orderTokens[5]);
         BigDecimal costPerSqFt = doubleToBigDec(orderTokens[6]);
@@ -144,6 +130,44 @@ public class DaoFileImpl implements DaoFileInterface {
         return taxInfo;
     }
 
+    public Map<Integer, Order> loadOrder(String file) throws PersistenceException {
+        Map<Integer, Order> order = new HashMap<>();
+        File dir = new File(file);
+        File[] directoryListing = dir.listFiles();
+        if (directoryListing != null) {
+            for (File child : directoryListing) {
+                Scanner scanner;
+
+                try {
+                    scanner = new Scanner(
+                            new BufferedReader(
+                                    new FileReader(child)
+                            )
+                    );
+                } catch (FileNotFoundException e) {
+                    throw new PersistenceException("Could not load products into memory", e);
+                }
+                if (scanner.hasNextLine()) {
+                    scanner.nextLine();
+                };
+                String currentLine;
+                Order currentOrder;
+                LocalDate orderDate = LocalDate.parse(child.getName().substring(7, 15), DateTimeFormatter.ofPattern("MMddyyyy"));
+                while (scanner.hasNextLine()) {
+                    currentLine = scanner.nextLine();
+                    currentOrder = unmarshalOrder(orderDate, currentLine);
+                    order.put(currentOrder.getOrderNumber(), currentOrder);
+                }
+
+                scanner.close();
+            }
+        } else {
+            throw new PersistenceException("Could not find directory");
+        }
+        return order;
+    }
+
+
     public String marshalProduct(Product product) {
         String productAsText = product.getProductType() + DELIMITER;
         productAsText += product.getCostPerSqFt() + DELIMITER;
@@ -151,13 +175,13 @@ public class DaoFileImpl implements DaoFileInterface {
         return productAsText;
     }
 
+
     public String marshalTaxInfo(TaxInfo taxInfo) {
         String taxInfoAsText = taxInfo.getStateAbbrev() + DELIMITER;
         taxInfoAsText += taxInfo.getStateName() + DELIMITER;
         taxInfoAsText += taxInfo.getTaxRate();
         return taxInfoAsText;
     }
-
 
     public String marshalOrder(Order order) {
         String orderInfoAsText = order.getOrderNumber() + DELIMITER;
@@ -226,40 +250,22 @@ public class DaoFileImpl implements DaoFileInterface {
         out.flush();
     }
 
-    public Map<Integer, Order> loadOrder(String file) throws PersistenceException {
-        Map<Integer, Order> order = new HashMap<>();
-        File dir = new File(file);
-        File[] directoryListing = dir.listFiles();
-        if (directoryListing != null) {
-            for (File child : directoryListing) {
-                Scanner scanner;
-
-                try {
-                    scanner = new Scanner(
-                            new BufferedReader(
-                                    new FileReader(child)
-                            )
-                    );
-                } catch (FileNotFoundException e) {
-                    throw new PersistenceException("Could not load products into memory", e);
-                }
-                if (scanner.hasNextLine()) {
-                    scanner.nextLine();
-                };
-                String currentLine;
-                Order currentOrder;
-                LocalDate orderDate = LocalDate.parse(child.getName().substring(7, 15), DateTimeFormatter.ofPattern("MMddyyyy"));
-                while (scanner.hasNextLine()) {
-                    currentLine = scanner.nextLine();
-                    currentOrder = unmarshalOrder(orderDate, currentLine);
-                    order.put(currentOrder.getOrderNumber(), currentOrder);
-                }
-
-                scanner.close();
+    public void deleteOrderFile(LocalDate date) throws PersistenceException {
+        String basic = date.format(DateTimeFormatter.BASIC_ISO_DATE);
+        String year = basic.substring(0,4);
+        String monthDate = basic.substring(4,8);
+        String fileName = "Orders_" +  monthDate + year;
+        File file = new File("src/Orders/" + fileName + ".txt");
+        try {
+            if(file.delete()) {
+                System.out.println(file.getName() + " deleted");   //getting and printing the file name
+            } else {
+                System.out.println("Deletion failed");
             }
-        } else {
-            throw new PersistenceException("Could not find directory");
         }
-        return order;
+        catch(Exception e) {
+            throw new PersistenceException("Could not persist audit information", e);
+        }
     }
+
 }

@@ -67,6 +67,7 @@ public class DaoImpl implements DaoInterface {
         orders.put(order.getOrderNumber(), order);
         fio.writeOrder(order);
     }
+
     public void updateExistingOrder(Order order) throws PersistenceException {
         orders.put(order.getOrderNumber(), order);
         fio.writeAllOrders(orders.values()
@@ -75,4 +76,19 @@ public class DaoImpl implements DaoInterface {
                 .collect(Collectors.toList()));
     }
 
+    @Override
+    public void deleteExistingOrder(Order order) throws PersistenceException {
+        orders.remove(order.getOrderNumber(), order);
+            if (orders.values()
+                    .stream()
+                    .filter(order2 -> order2.getOrderDate().equals(order.getOrderDate()))
+                    .collect(Collectors.toList()).size() > 0) {
+                fio.writeAllOrders(orders.values()
+                        .stream()
+                        .filter(order1 -> order1.getOrderDate().equals(order.getOrderDate()))
+                        .collect(Collectors.toList()));
+            } else {
+                fio.deleteOrderFile(order.getOrderDate());
+            }
+    }
 }

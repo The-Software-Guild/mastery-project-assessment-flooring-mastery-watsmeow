@@ -31,4 +31,6 @@ public interface DaoFileInterface {
     void writeOrder(Order order) throws PersistenceException;
 
     void writeAllOrders(List<Order> orderList) throws PersistenceException;
+
+    void deleteOrderFile(LocalDate orderDate) throws PersistenceException;
 }
