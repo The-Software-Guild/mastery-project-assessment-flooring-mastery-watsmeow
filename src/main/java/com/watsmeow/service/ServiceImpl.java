@@ -45,6 +45,7 @@ public class ServiceImpl implements ServiceInterface {
     public Order generateFullOrder(Order order) throws PersistenceException {
         Product product = dao.getProduct(order.getProductType());
         TaxInfo taxInfo = dao.getTaxInfo(order.getState());
+        order.setStateAbbrev(taxInfo.getStateAbbrev());
         order.setTaxRate(taxInfo.getTaxRate());
         order.setProductType(product.getProductType());
         order.setCostPerSqFt(product.getCostPerSqFt());

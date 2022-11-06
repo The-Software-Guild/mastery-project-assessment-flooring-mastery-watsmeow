@@ -49,7 +49,7 @@ public class DaoFileImpl implements DaoFileInterface {
         String[] orderTokens = orderAsText.split(DELIMITER);
         int orderNumber = Integer.parseInt(orderTokens[0]);
         String customerName = orderTokens[1];
-        String state = orderTokens[2];
+        String stateAbbrev = orderTokens[2];
         BigDecimal taxRate = doubleToBigDec(orderTokens[3]);
         String productType = orderTokens[4];
         BigDecimal area = doubleToBigDec(orderTokens[5]);
@@ -59,7 +59,7 @@ public class DaoFileImpl implements DaoFileInterface {
         BigDecimal laborCost = doubleToBigDec(orderTokens[9]);
         BigDecimal tax = doubleToBigDec(orderTokens[10]);
         BigDecimal total = doubleToBigDec(orderTokens[11]);
-        Order orderFile = new Order(customerName, state, productType, area);
+        Order orderFile = new Order(customerName, stateAbbrev, productType, area);
         orderFile.setOrderDate(orderDate);
         orderFile.setOrderNumber(orderNumber);
         orderFile.setTaxRate(taxRate);
@@ -186,7 +186,7 @@ public class DaoFileImpl implements DaoFileInterface {
     public String marshalOrder(Order order) {
         String orderInfoAsText = order.getOrderNumber() + DELIMITER;
         orderInfoAsText += order.getCustomerName() + DELIMITER;
-        orderInfoAsText += order.getState() + DELIMITER;
+        orderInfoAsText += order.getStateAbbrev() + DELIMITER;
         orderInfoAsText += order.getTaxRate() + DELIMITER;
         orderInfoAsText += order.getProductType() + DELIMITER;
         orderInfoAsText += order.getArea() + DELIMITER;

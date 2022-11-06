@@ -13,6 +13,9 @@ public class Order {
 
     private String state;
 
+
+    private String stateAbbrev;
+
     private BigDecimal taxRate;
 
     private String productType;
@@ -43,6 +46,7 @@ public class Order {
     public void setOrderDate(LocalDate orderDate) {
         this.orderDate = orderDate;
     }
+
     public void setOrderNumber(int orderNumber) {
         this.orderNumber = orderNumber;
     }
@@ -51,12 +55,20 @@ public class Order {
         this.customerName = customerName;
     }
 
+
     public void setState(String state) {
         this.state = state;
     }
+
+    
+    public void setStateAbbrev(String stateAbbrev) {
+        this.stateAbbrev = stateAbbrev;
+    }
+
     public void setTaxRate(BigDecimal taxRate) {
         this.taxRate = taxRate;
     }
+
     public void setProductType(String productType) {
         this.productType = productType;
     }
@@ -103,8 +115,13 @@ public class Order {
         return customerName;
     }
 
+
     public String getState() {
         return state;
+    }
+
+    public String getStateAbbrev() {
+        return stateAbbrev;
     }
 
     public BigDecimal getArea() {

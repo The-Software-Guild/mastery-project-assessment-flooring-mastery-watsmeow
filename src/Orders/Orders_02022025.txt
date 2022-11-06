@@ -1,2 +1,4 @@
 OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
 6,Hella World,California,25.00,Laminate,150,1.75,2.10,262.50,315.00,144.38,721.88
+8,Itsa Name,Kentucky,6.00,Carpet,101,2.25,2.10,227.25,212.10,26.36,465.71
+9,Test Order,TX,4.45,Wood,300,5.15,4.75,1545.00,1425.00,132.17,3102.17

@@ -19,6 +19,7 @@ public class DaoImpl implements DaoInterface {
     private Map<Integer, Order> orders = new HashMap();
 
     private static final String PRODUCTS_FILE = "src/Data/products.txt";
+
     private static final String TAXES_FILE = "src/Data/taxinfo.txt";
 
     private static final String ORDERS_FILE = "src/Orders";
