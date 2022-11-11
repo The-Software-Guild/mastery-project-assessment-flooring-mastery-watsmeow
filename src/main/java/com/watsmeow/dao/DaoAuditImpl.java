@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 public class DaoAuditImpl implements DaoAuditInterface {
 
+    // Defines the audit 
     public static final String AUDIT_FILE = "src/Data/audit.txt";
 
     @Override

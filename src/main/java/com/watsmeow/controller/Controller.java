@@ -24,7 +24,8 @@ public class Controller {
         this.service = service;
     }
 
-    public void run() throws PersistenceException, ValidationException {
+    // Called by the App to run the application
+    public void run() throws PersistenceException {
         boolean keepRunning = true;
         int userSelection = 0;
 
@@ -65,10 +66,12 @@ public class Controller {
         }
     }
 
+    // Prints initial options menu for user and gets their selection
     private int getUserMenuSelection() {
         return view.printMenuGetUserSelection();
     }
 
+    // Displays orders per date parameters defined by the user
     private void displayOrdersOfGivenDate() throws PersistenceException {
         try {
             LocalDate date = view.getOrderDate();
@@ -83,6 +86,7 @@ public class Controller {
         }
     }
 
+    // Adds and saves a new order
     private void addOrder() throws ValidationException, PersistenceException {
         List<Product> productList = service.getAllProducts();
         List<TaxInfo> taxInfoList = service.getAllTaxInfo();
@@ -94,11 +98,13 @@ public class Controller {
         view.actionCompletedSuccessfullyBanner();
     }
 
+    // Edits and saves an existing order
     private void editOrder() throws PersistenceException, ValidationException {
         List<Product> productList = service.getAllProducts();
         List<TaxInfo> taxInfoList = service.getAllTaxInfo();
         view.editFieldBanner();
-        Optional<Order> optionalOrder = service.getOrderToEditOrDeleteOrder(view.getOrderDate(), view.getOrderNumber());
+        Optional<Order> optionalOrder =
+                service.getOrderToEditOrDeleteOrder(view.getOrderDate(), view.getOrderNumber());
         if (optionalOrder.isEmpty()) {
             view.ordersDoNotExistBanner();
             editOrder();
@@ -114,8 +120,10 @@ public class Controller {
         }
     }
 
+    // Deletes an existing order
     private void removeOrder() throws PersistenceException {
-        Optional<Order> optionalOrder = service.getOrderToEditOrDeleteOrder(view.getOrderDate(), view.getOrderNumber());
+        Optional<Order> optionalOrder =
+                service.getOrderToEditOrDeleteOrder(view.getOrderDate(), view.getOrderNumber());
         if (optionalOrder.isEmpty()) {
             view.ordersDoNotExistBanner();
             removeOrder();

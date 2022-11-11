@@ -62,6 +62,7 @@ public class DaoFileImpl implements DaoFileInterface {
         Order orderFile = new Order(customerName, stateAbbrev, productType, area);
         orderFile.setOrderDate(orderDate);
         orderFile.setOrderNumber(orderNumber);
+        orderFile.setStateAbbrev(stateAbbrev);
         orderFile.setTaxRate(taxRate);
         orderFile.setCostPerSqFt(costPerSqFt);
         orderFile.setLaborCostPerSqFt(laborCostPerSqFt);
@@ -123,7 +124,7 @@ public class DaoFileImpl implements DaoFileInterface {
         while (scanner.hasNextLine()) {
             currentLine = scanner.nextLine();
             currentTaxInfo = unmarshalTaxInfo(currentLine);
-            taxInfo.put(currentTaxInfo.getStateName().toLowerCase(), currentTaxInfo);
+            taxInfo.put(currentTaxInfo.getStateAbbrev().toLowerCase(), currentTaxInfo);
         }
 
         scanner.close();

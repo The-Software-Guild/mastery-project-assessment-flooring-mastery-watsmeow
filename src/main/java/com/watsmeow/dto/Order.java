@@ -13,7 +13,6 @@ public class Order {
 
     private String state;
 
-
     private String stateAbbrev;
 
     private BigDecimal taxRate;
