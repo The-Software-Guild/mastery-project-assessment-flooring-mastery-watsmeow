@@ -63,4 +63,6 @@ public interface DaoFileInterface {
      * Deletes a .txt file if it is empty of orders
      */
     void deleteOrderFile(LocalDate orderDate) throws PersistenceException;
+
+    void writeToExportAllData() throws PersistenceException;
 }

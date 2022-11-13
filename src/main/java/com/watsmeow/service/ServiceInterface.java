@@ -51,4 +51,6 @@ public interface ServiceInterface {
      * If new order, generates and assigns a unique order number that is +1 > the largest existing order number
      */
     void saveOrder(Order order) throws PersistenceException;
+
+    void exportData() throws PersistenceException;
 }

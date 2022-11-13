@@ -126,7 +126,7 @@ public class DaoFileImpl implements DaoFileInterface {
         while (scanner.hasNextLine()) {
             currentLine = scanner.nextLine();
             currentTaxInfo = unmarshalTaxInfo(currentLine);
-            taxInfo.put(currentTaxInfo.getStateAbbrev().toLowerCase(), currentTaxInfo);
+            taxInfo.put(currentTaxInfo.getStateName().toLowerCase(), currentTaxInfo);
         }
 
         scanner.close();
@@ -270,6 +270,51 @@ public class DaoFileImpl implements DaoFileInterface {
         }
         catch(Exception e) {
             throw new PersistenceException("Could not persist audit information", e);
+        }
+    }
+
+    @Override
+    public void writeToExportAllData() throws PersistenceException {
+        File[] directoryListing = new File("src/Orders").listFiles();
+        if (directoryListing != null) {
+            PrintWriter out;
+            File file = new File("src/Backup/DataExport.txt");
+            try {
+                out = new PrintWriter(new FileWriter(file, false));
+            } catch (IOException e) {
+                throw new PersistenceException("Could not load products into memory", e);
+            }
+            out.println("OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot," +
+                    "LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total, Order Date");
+            for (File child : directoryListing) {
+                Scanner scanner;
+
+                try {
+                    scanner = new Scanner(
+                            new BufferedReader(
+                                    new FileReader(child)
+                            )
+                    );
+
+                } catch (FileNotFoundException e) {
+                    throw new PersistenceException("Could not load products into memory", e);
+                }
+                if (scanner.hasNextLine()) {
+                    scanner.nextLine();
+                };
+                String currentLine;
+                LocalDate orderDate = LocalDate.parse(child.getName().substring(7, 15), DateTimeFormatter.ofPattern("MMddyyyy"));
+                while (scanner.hasNextLine()) {
+                    currentLine = scanner.nextLine();
+                    out.println(currentLine + "," + orderDate);
+                }
+
+                scanner.close();
+            }
+            out.flush();
+            out.close();
+        } else {
+            throw new PersistenceException("Could not find directory");
         }
     }
 

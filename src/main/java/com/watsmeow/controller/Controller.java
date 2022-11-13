@@ -54,7 +54,7 @@ public class Controller {
                         removeOrder();
                         break;
                     case 5:
-//                        exportData();
+                        exportData();
                         break;
                     case 6:
                         keepRunning = false;
@@ -114,6 +114,12 @@ public class Controller {
             editOrder();
         } else {
             Order order = optionalOrder.get();
+            String stateAbbrev = order.getStateAbbrev();
+            TaxInfo taxInfoForState = service.getAllTaxInfo()
+                    .stream()
+                    .filter(taxInfo -> taxInfo.getStateAbbrev().equals(stateAbbrev))
+                    .findFirst().get();
+            order.setState(taxInfoForState.getStateName());
             order = view.editExistingOrder(order, productList, taxInfoList);
             order = service.generateFullOrder(order);
             view.displayOrderInformation(order);
@@ -138,6 +144,10 @@ public class Controller {
                 service.deleteOrder(order);
             }
         }
+    }
+
+    private void exportData() throws PersistenceException {
+        service.exportData();
     }
 
     private void unknownCommand() {

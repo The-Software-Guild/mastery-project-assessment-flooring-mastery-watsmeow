@@ -1,0 +1,10 @@
+OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total, Order Date
+7,Roberto,TX,4.45,Wood,250.00,5.15,4.75,1287.50,1187.50,110.14,2585.14,2023-01-01
+6,Hella World,California,25.00,Laminate,150,1.75,2.10,262.50,315.00,144.38,721.88,2025-02-02
+8,Itsa Name,Kentucky,6.00,Carpet,101,2.25,2.10,227.25,212.10,26.36,465.71,2025-02-02
+9,Test Order,TX,4.45,Wood,300,5.15,4.75,1545.00,1425.00,132.17,3102.17,2025-02-02
+11,Bobby Bob,CA,25.00,Laminate,200,1.75,2.10,350.00,420.00,192.50,962.50,2024-03-03
+10,Hello World,CA,25.00,Laminate,200,1.75,2.10,350.00,420.00,192.50,962.50,2025-05-05
+1,Ada Lovelace,CA,25.00,Tile,249.00,3.50,4.15,871.50,1033.35,476.21,2381.06,2013-06-01
+2,Doctor Who,WA,9.25,Wood,243.00,5.15,4.75,1251.45,1154.25,216.51,2622.21,2013-06-02
+3,Albert Einstein,KY,6.00,Carpet,217.00,2.25,2.10,488.25,455.70,56.64,1000.59,2013-06-02

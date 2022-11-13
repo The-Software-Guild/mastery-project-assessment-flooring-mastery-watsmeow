@@ -159,12 +159,17 @@ public class View {
                 .map(taxInfo -> taxInfo.getStateName().toLowerCase())
                 .collect(Collectors.toList());
         String state;
+        boolean validInput = false;
         do {
             state = io.readString("***Enter the state where the order will be installed***");
-            if ((!isCreate && !state.equals("")) && !stateNames.contains(state.toLowerCase())) {
+            if (!isCreate && state.equals("")) {
+                validInput = true;
+            } else if (stateNames.contains(state.toLowerCase())) {
+                validInput = true;
+            } else {
                 io.print("<<Service unavailable in that state, choose a state from the list>>");
             }
-        } while ((!isCreate && !state.equals("")) && !stateNames.contains(state.toLowerCase()));
+        } while (!validInput);
         return state;
     }
 
@@ -175,12 +180,17 @@ public class View {
                 .map(productName -> productName.getProductType().toLowerCase())
                 .collect(Collectors.toList());
         String productType;
+        boolean validInput = false;
         do {
             productType = io.readString("***Enter the product name***");
-            if ((!isCreate && !productType.equals("")) && !productNames.contains(productType.toLowerCase())) {
-                io.print("<<Only products from the list are available for purchase>>");
+            if (!isCreate && productType.equals("")) {
+                validInput = true;
+            } else if (productNames.contains(productType.toLowerCase())) {
+                validInput = true;
+            } else {
+                io.print("<<Product unavailable, choose a product from the list>>");
             }
-        } while ((!isCreate && !productType.equals("")) && !productNames.contains(productType.toLowerCase()));
+        } while (!validInput);
         return productType;
     }
 

@@ -49,8 +49,7 @@ public class ServiceImpl implements ServiceInterface {
 
     public Order generateFullOrder(Order order) throws PersistenceException {
         Product product = dao.getProduct(order.getProductType());
-        TaxInfo taxInfo = dao.getTaxInfo(order.getStateAbbrev());
-        order.setState(taxInfo.getStateName());
+        TaxInfo taxInfo = dao.getTaxInfo(order.getState());
         order.setStateAbbrev(taxInfo.getStateAbbrev());
         order.setTaxRate(taxInfo.getTaxRate());
         order.setProductType(product.getProductType());
@@ -93,5 +92,9 @@ public class ServiceImpl implements ServiceInterface {
         order.setOrderNumber(orderNumber);
         dao.createNewOrder(order);
         auditDao.writeAuditEntry("Order " + order.getOrderNumber() + " saved");
+    }
+
+    public void exportData() throws PersistenceException {
+        dao.exportAllData();
     }
 }

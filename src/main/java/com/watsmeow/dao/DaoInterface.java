@@ -45,4 +45,6 @@ public interface DaoInterface  {
      * @param order is the order object being deleted
      */
     void deleteExistingOrder(Order order) throws PersistenceException;
+
+    void exportAllData() throws PersistenceException;
 }

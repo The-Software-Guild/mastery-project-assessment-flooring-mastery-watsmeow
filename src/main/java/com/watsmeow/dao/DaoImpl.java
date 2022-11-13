@@ -57,9 +57,9 @@ public class DaoImpl implements DaoInterface {
     }
 
     @Override
-    public TaxInfo getTaxInfo(String stateAbbrev) throws PersistenceException {
+    public TaxInfo getTaxInfo(String state) throws PersistenceException {
         taxinfo = fio.loadTaxInfo(TAXES_FILE);
-        return taxinfo.get(stateAbbrev.toLowerCase());
+        return taxinfo.get(state.toLowerCase());
     }
 
     public Set<Integer> getOrderNumbers() {
@@ -93,5 +93,10 @@ public class DaoImpl implements DaoInterface {
             } else {
                 fio.deleteOrderFile(order.getOrderDate());
             }
+    }
+
+    @Override
+    public void exportAllData() throws PersistenceException {
+        fio.writeToExportAllData();
     }
 }
