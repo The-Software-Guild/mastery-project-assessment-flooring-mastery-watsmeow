@@ -3,6 +3,8 @@ package com.watsmeow.view;
 import com.watsmeow.dto.Order;
 import com.watsmeow.dto.Product;
 import com.watsmeow.dto.TaxInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,10 +13,12 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class View {
 
     private UserIO io;
 
+    @Autowired
     public View(UserIO io) {
         this.io = io;
     }

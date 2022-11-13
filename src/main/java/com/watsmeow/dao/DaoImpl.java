@@ -3,11 +3,13 @@ package com.watsmeow.dao;
 import com.watsmeow.dto.Order;
 import com.watsmeow.dto.Product;
 import com.watsmeow.dto.TaxInfo;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Repository
 public class DaoImpl implements DaoInterface {
 
     DaoFileInterface fio;
@@ -79,7 +81,7 @@ public class DaoImpl implements DaoInterface {
 
     @Override
     public void deleteExistingOrder(Order order) throws PersistenceException {
-        orders.remove(order.getOrderNumber(), order);
+        orders.remove(order.getOrderNumber());
             if (orders.values()
                     .stream()
                     .filter(order2 -> order2.getOrderDate().equals(order.getOrderDate()))

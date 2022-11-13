@@ -1,10 +1,13 @@
 package com.watsmeow.dao;
 
+import org.springframework.stereotype.Repository;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 
+@Repository
 public class DaoAuditImpl implements DaoAuditInterface {
 
     // Defines the audit 

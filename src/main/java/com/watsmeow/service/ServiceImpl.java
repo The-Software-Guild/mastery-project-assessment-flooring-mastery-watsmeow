@@ -6,6 +6,9 @@ import com.watsmeow.dao.PersistenceException;
 import com.watsmeow.dto.Order;
 import com.watsmeow.dto.Product;
 import com.watsmeow.dto.TaxInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -16,12 +19,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Service
 public class ServiceImpl implements ServiceInterface {
 
     private DaoInterface dao;
 
     private DaoAuditInterface auditDao;
 
+    @Autowired
     public ServiceImpl (DaoInterface dao, DaoAuditInterface auditDao) {
         this.dao = dao;
         this.auditDao = auditDao;

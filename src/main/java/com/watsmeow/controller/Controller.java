@@ -7,18 +7,22 @@ import com.watsmeow.dto.TaxInfo;
 import com.watsmeow.service.ServiceInterface;
 import com.watsmeow.service.ValidationException;
 import com.watsmeow.view.View;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 
+@org.springframework.stereotype.Controller
 public class Controller {
 
     private View view;
 
     private ServiceInterface service;
 
+
+    @Autowired
     public Controller(View view, ServiceInterface service) {
         this.view = view;
         this.service = service;

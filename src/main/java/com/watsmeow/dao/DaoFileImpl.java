@@ -3,6 +3,7 @@ package com.watsmeow.dao;
 import com.watsmeow.dto.Order;
 import com.watsmeow.dto.Product;
 import com.watsmeow.dto.TaxInfo;
+import org.springframework.stereotype.Repository;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -17,6 +18,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
+@Repository
 public class DaoFileImpl implements DaoFileInterface {
 
     private static final String DELIMITER = ",";
@@ -223,6 +225,7 @@ public class DaoFileImpl implements DaoFileInterface {
         }
         out.println(newOrderEntry);
         out.flush();
+        out.close();
     }
 
     public void writeAllOrders(List<Order> orderList) throws PersistenceException {
@@ -249,6 +252,7 @@ public class DaoFileImpl implements DaoFileInterface {
             out.println(updatedEntry);
         }
         out.flush();
+        out.close();
     }
 
     public void deleteOrderFile(LocalDate date) throws PersistenceException {

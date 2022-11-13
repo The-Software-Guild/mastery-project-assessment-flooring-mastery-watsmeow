@@ -1,5 +1,7 @@
 package com.watsmeow.view;
 
+import org.springframework.stereotype.Component;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -8,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
+@Component
 public class UserIOImpl implements UserIO {
     @Override
     public void print(String msg) {

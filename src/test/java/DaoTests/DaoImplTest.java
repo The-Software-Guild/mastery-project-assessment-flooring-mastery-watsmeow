@@ -21,22 +21,22 @@ public class DaoImplTest {
     @org.junit.jupiter.api.BeforeAll
     public static void SetUpClass() throws Exception {
         testDao = new DaoImpl();
-        Order testOrder = new Order("Test Customer", "Washington", "Wood",
-                new BigDecimal(150));
-        testOrder.setOrderDate(LocalDate.now().plusDays(30000));
-        testOrder.setOrderNumber(14);
-        testOrder.setCustomerName("Test");
-        testOrder.setState("TX");
-        testOrder.setTaxRate(new BigDecimal(4.45));
-        testOrder.setProductType("Wood");
-        testOrder.setArea(new BigDecimal(300));
-        testOrder.setCostPerSqFt(new BigDecimal(5.15));
-        testOrder.setLaborCostPerSqFt(new BigDecimal(4.75));
-        testOrder.setMaterialCost(new BigDecimal(1287.50));
-        testOrder.setLaborCost(new BigDecimal(1187.50));
-        testOrder.setTax(new BigDecimal(110.14));
-        testOrder.setTotal(new BigDecimal(2585.14));
-        testDao.createNewOrder(testOrder);
+//        Order testOrder = new Order("Test Customer", "Washington", "Wood",
+//                new BigDecimal(150));
+//        testOrder.setOrderDate(LocalDate.now().plusDays(30000));
+//        testOrder.setOrderNumber(14);
+//        testOrder.setCustomerName("Test");
+//        testOrder.setStateAbbrev("WA");
+//        testOrder.setTaxRate(new BigDecimal(4.45));
+//        testOrder.setProductType("Wood");
+//        testOrder.setArea(new BigDecimal(300));
+//        testOrder.setCostPerSqFt(new BigDecimal(5.15));
+//        testOrder.setLaborCostPerSqFt(new BigDecimal(4.75));
+//        testOrder.setMaterialCost(new BigDecimal(1287.50));
+//        testOrder.setLaborCost(new BigDecimal(1187.50));
+//        testOrder.setTax(new BigDecimal(110.14));
+//        testOrder.setTotal(new BigDecimal(2585.14));
+//        testDao.createNewOrder(testOrder);
     }
 
     @org.junit.jupiter.api.AfterAll
@@ -56,7 +56,7 @@ public class DaoImplTest {
         testOrder.setOrderDate(LocalDate.now().plusDays(30000));
         testOrder.setOrderNumber(14);
         testOrder.setCustomerName("Test");
-        testOrder.setState("TX");
+        testOrder.setStateAbbrev("WA");
         testOrder.setTaxRate(new BigDecimal(4.45));
         testOrder.setProductType("Wood");
         testOrder.setArea(new BigDecimal(300));
@@ -107,7 +107,7 @@ public class DaoImplTest {
     @org.junit.jupiter.api.Test
     public void testTaxInfo() throws Exception {
         TaxInfo garbageTaxInfo = testDao.getTaxInfo("Garbage");
-        TaxInfo testTaxInfo = testDao.getTaxInfo("Texas");
+        TaxInfo testTaxInfo = testDao.getTaxInfo("WA");
         Assertions.assertNull(garbageTaxInfo);
         Assertions.assertNotNull(testTaxInfo);
     }
@@ -120,12 +120,12 @@ public class DaoImplTest {
 
     @org.junit.jupiter.api.Test
     public void testCreateOrder() throws Exception {
-        Order testOrder = new Order("Another TestCustomer", "Texas", "Wood",
+        Order testOrder = new Order("Another TestCustomer", "Washington", "Wood",
                 new BigDecimal(150));
         testOrder.setOrderDate(LocalDate.now().plusDays(30000));
         testOrder.setOrderNumber(16);
         testOrder.setCustomerName("Test");
-        testOrder.setState("TX");
+        testOrder.setStateAbbrev("WA");
         testOrder.setTaxRate(new BigDecimal(4.45));
         testOrder.setProductType("Wood");
         testOrder.setArea(new BigDecimal(300));
@@ -149,7 +149,7 @@ public class DaoImplTest {
         testOrder.setOrderDate(LocalDate.now().plusDays(30000));
         testOrder.setOrderNumber(16);
         testOrder.setCustomerName("Test");
-        testOrder.setState("TX");
+        testOrder.setState("WA");
         testOrder.setTaxRate(new BigDecimal(4.45));
         testOrder.setProductType("Wood");
         testOrder.setArea(new BigDecimal(300));
