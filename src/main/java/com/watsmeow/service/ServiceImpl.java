@@ -22,20 +22,24 @@ import java.util.stream.Collectors;
 @Service
 public class ServiceImpl implements ServiceInterface {
 
+    // Bring in classes to construct the service layer
     private DaoInterface dao;
 
     private DaoAuditInterface auditDao;
 
+    // Construct the service implementation
     @Autowired
     public ServiceImpl (DaoInterface dao, DaoAuditInterface auditDao) {
         this.dao = dao;
         this.auditDao = auditDao;
     }
 
+    // Method to list all products, calls the dao
     public List<Product> getAllProducts() throws PersistenceException {
         return dao.getAllProducts();
     }
 
+    // Method to list orders by order date, uses the dao getAllOrders method and then filters for date
     public List<Order> getOrdersByDate(LocalDate date) throws PersistenceException {
         return dao.getAllOrders()
                 .stream()
@@ -43,10 +47,12 @@ public class ServiceImpl implements ServiceInterface {
                 .collect(Collectors.toList());
     }
 
+    // Method to get all tax information, calls the dao
     public List<TaxInfo> getAllTaxInfo() throws PersistenceException {
         return dao.getAllTaxInfo();
     }
 
+    // Method to generate a full order using the input provided by the user
     public Order generateFullOrder(Order order) throws PersistenceException {
         Product product = dao.getProduct(order.getProductType());
         TaxInfo taxInfo = dao.getTaxInfo(order.getState());
@@ -67,6 +73,7 @@ public class ServiceImpl implements ServiceInterface {
         return order;
     }
 
+    // Method to get an order by order number in order to delete it from memory
     public Optional<Order> getOrderToEditOrDeleteOrder(LocalDate date, int orderNumber) throws PersistenceException {
         List<Order> orderList = getOrdersByDate(date);
         Optional<Order> singleOrder = orderList.stream()
@@ -75,16 +82,19 @@ public class ServiceImpl implements ServiceInterface {
         return singleOrder;
     }
 
+    // Method to edit an order and write an entry to the audit log
     public void editOrder(Order order) throws PersistenceException {
         dao.updateExistingOrder(order);
         auditDao.writeAuditEntry("Order " + order.getOrderNumber() + " edited");
     }
 
+    // Method to delete an order and write an entry to the audit log
     public void deleteOrder(Order order) throws PersistenceException {
         dao.deleteExistingOrder(order);
         auditDao.writeAuditEntry("Order " + order.getOrderNumber() + " deleted");
     }
 
+    // Method to save an order and write an entry to the audit log
     public void saveOrder(Order order) throws PersistenceException {
         int orderNumber = dao.getOrderNumbers()
                 .stream()
@@ -94,6 +104,7 @@ public class ServiceImpl implements ServiceInterface {
         auditDao.writeAuditEntry("Order " + order.getOrderNumber() + " saved");
     }
 
+    // Method to export all data to the backup folder
     public void exportData() throws PersistenceException {
         dao.exportAllData();
     }

@@ -58,11 +58,12 @@ public interface DaoFileInterface {
 
     void writeAllOrders(List<Order> orderList) throws PersistenceException;
 
+    void writeToExportAllData() throws PersistenceException;
+
     /**
      * Delete method:
      * Deletes a .txt file if it is empty of orders
      */
     void deleteOrderFile(LocalDate orderDate) throws PersistenceException;
 
-    void writeToExportAllData() throws PersistenceException;
 }

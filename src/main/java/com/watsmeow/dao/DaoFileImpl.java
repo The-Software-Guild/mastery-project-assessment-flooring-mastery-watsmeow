@@ -29,6 +29,7 @@ public class DaoFileImpl implements DaoFileInterface {
         return bigDec.setScale(2, RoundingMode.HALF_UP);
     }
 
+    // Unmarshalls product data from the product file
     public Product unmarshalProduct(String productAsText) {
         String[] productTokens = productAsText.split(DELIMITER);
         String productType = productTokens[0];
@@ -38,6 +39,7 @@ public class DaoFileImpl implements DaoFileInterface {
         return productFromFile;
     }
 
+    // Unmarshalls tax info data from the tax info file
     public TaxInfo unmarshalTaxInfo(String infoAsText) {
         String[] taxTokens = infoAsText.split(DELIMITER);
         String stateAbbrev = taxTokens[0];
@@ -47,6 +49,7 @@ public class DaoFileImpl implements DaoFileInterface {
         return infoFromFile;
     }
 
+    // Unmarshalls order data from the order file
     public Order unmarshalOrder(LocalDate orderDate, String orderAsText) {
         String[] orderTokens = orderAsText.split(DELIMITER);
         int orderNumber = Integer.parseInt(orderTokens[0]);
@@ -75,6 +78,7 @@ public class DaoFileImpl implements DaoFileInterface {
         return orderFile;
     }
 
+    // Loads product data into a hashmap
     @Override
     public Map<String, Product> loadProducts(String file) throws PersistenceException {
         Scanner scanner;
@@ -104,6 +108,7 @@ public class DaoFileImpl implements DaoFileInterface {
         return products;
     }
 
+    // Loads tax info data into a hashmap
     public Map<String, TaxInfo> loadTaxInfo(String file) throws PersistenceException {
         Scanner scanner;
         try {
@@ -133,6 +138,7 @@ public class DaoFileImpl implements DaoFileInterface {
         return taxInfo;
     }
 
+    // Loads order data into a hashmap
     public Map<Integer, Order> loadOrder(String file) throws PersistenceException {
         Map<Integer, Order> order = new HashMap<>();
         File dir = new File(file);
@@ -170,7 +176,7 @@ public class DaoFileImpl implements DaoFileInterface {
         return order;
     }
 
-
+    // Marshals product data into the txt file
     public String marshalProduct(Product product) {
         String productAsText = product.getProductType() + DELIMITER;
         productAsText += product.getCostPerSqFt() + DELIMITER;
@@ -178,7 +184,7 @@ public class DaoFileImpl implements DaoFileInterface {
         return productAsText;
     }
 
-
+    // Marshals tax info data into the txt file
     public String marshalTaxInfo(TaxInfo taxInfo) {
         String taxInfoAsText = taxInfo.getStateAbbrev() + DELIMITER;
         taxInfoAsText += taxInfo.getStateName() + DELIMITER;
@@ -186,6 +192,7 @@ public class DaoFileImpl implements DaoFileInterface {
         return taxInfoAsText;
     }
 
+    // Marshals order data into the txt file
     public String marshalOrder(Order order) {
         String orderInfoAsText = order.getOrderNumber() + DELIMITER;
         orderInfoAsText += order.getCustomerName() + DELIMITER;
@@ -202,6 +209,7 @@ public class DaoFileImpl implements DaoFileInterface {
         return orderInfoAsText;
     }
 
+    // Writes order data to a file based on order date, creates a new file if none exists for order date
     public void writeOrder(Order order) throws PersistenceException {
         String newOrderEntry = marshalOrder(order);
         String basic = order.getOrderDate().format(DateTimeFormatter.BASIC_ISO_DATE);
@@ -228,6 +236,7 @@ public class DaoFileImpl implements DaoFileInterface {
         out.close();
     }
 
+    // Rewrites order data when there is a deletion or update
     public void writeAllOrders(List<Order> orderList) throws PersistenceException {
         Order order = orderList.get(0);
         String basic = order.getOrderDate().format(DateTimeFormatter.BASIC_ISO_DATE);
@@ -255,6 +264,7 @@ public class DaoFileImpl implements DaoFileInterface {
         out.close();
     }
 
+    // Deletes order data to a file based on order date, deletes the file if there are no orders in it
     public void deleteOrderFile(LocalDate date) throws PersistenceException {
         String basic = date.format(DateTimeFormatter.BASIC_ISO_DATE);
         String year = basic.substring(0,4);
@@ -273,6 +283,7 @@ public class DaoFileImpl implements DaoFileInterface {
         }
     }
 
+    // Writes order data to a backup folder and data export file
     @Override
     public void writeToExportAllData() throws PersistenceException {
         File[] directoryListing = new File("src/Orders").listFiles();

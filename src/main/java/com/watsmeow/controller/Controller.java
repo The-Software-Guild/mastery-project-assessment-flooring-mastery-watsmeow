@@ -17,11 +17,12 @@ import java.util.Optional;
 @org.springframework.stereotype.Controller
 public class Controller {
 
+    // Declaring the classes that are used to construct the controller
     private View view;
 
     private ServiceInterface service;
 
-
+    // Constructing the controller
     @Autowired
     public Controller(View view, ServiceInterface service) {
         this.view = view;
@@ -146,14 +147,18 @@ public class Controller {
         }
     }
 
+    // Exports all existing order data into a backup folder
     private void exportData() throws PersistenceException {
         service.exportData();
+        view.actionCompletedSuccessfullyBanner();
     }
 
+    // Calls the unknown command banner
     private void unknownCommand() {
         view.unknownCommandBanner();
     }
 
+    // Calls the exit message banner
     private void exitMessage() {
         view.exitBanner();
     }

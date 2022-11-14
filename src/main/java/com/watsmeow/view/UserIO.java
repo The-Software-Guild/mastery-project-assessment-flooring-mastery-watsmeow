@@ -9,16 +9,35 @@ import java.time.LocalDateTime;
  */
 public interface UserIO {
 
+    /**
+     * Method to print a message to the user
+     */
     void print(String msg);
 
+    /**
+     * Method to read a string input from user
+     */
     String readString(String msg);
 
+
+    /**
+     * Method to read area input from user
+     */
     BigDecimal readArea(String msg);
 
+    /**
+     * Method to read date input from user
+     */
     LocalDate readDate(String msg);
 
+    /**
+     * Method to read number input from user
+     */
     int readNum(String msg);
 
+    /**
+     * Method to get menu selection from user
+     */
     int readSelection(String msg, int min, int max);
 
 }

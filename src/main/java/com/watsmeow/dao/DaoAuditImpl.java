@@ -10,9 +10,10 @@ import java.time.LocalDateTime;
 @Repository
 public class DaoAuditImpl implements DaoAuditInterface {
 
-    // Defines the audit 
+    // Defines the audit file
     public static final String AUDIT_FILE = "src/Data/audit.txt";
 
+    // Method to write to the audit file when an order is saved, edited or deleted
     @Override
     public void writeAuditEntry(String entry) throws PersistenceException {
         PrintWriter out;
@@ -30,8 +31,4 @@ public class DaoAuditImpl implements DaoAuditInterface {
         out.flush();
     }
 
-    @Override
-    public void writeOrderEntry(String entry) throws PersistenceException {
-
-    }
 }

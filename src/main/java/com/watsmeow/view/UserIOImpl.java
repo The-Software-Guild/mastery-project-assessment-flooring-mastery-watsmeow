@@ -17,6 +17,7 @@ public class UserIOImpl implements UserIO {
         System.out.println(msg);
     }
 
+    // Reads user string input
     @Override
     public String readString(String msg) {
         Scanner scanner = new Scanner(System.in);
@@ -25,6 +26,7 @@ public class UserIOImpl implements UserIO {
         return userStringInput;
     }
 
+    // Reads user area input
     @Override
     public BigDecimal readArea(String msg) {
         Scanner scanner = new Scanner(System.in);
@@ -35,6 +37,7 @@ public class UserIOImpl implements UserIO {
         return userAreaInput;
     }
 
+    // Reads user date input
     @Override
     public LocalDate readDate(String msg) {
         Scanner scanner = new Scanner(System.in);
@@ -48,6 +51,7 @@ public class UserIOImpl implements UserIO {
         return ld;
     }
 
+    // Reads user num input
     public int readNum(String msg) {
         Scanner scanner = new Scanner(System.in);
         System.out.println(msg);
@@ -55,6 +59,7 @@ public class UserIOImpl implements UserIO {
         return userNumSelection;
     }
 
+    // Reads user menu selection
     @Override
     public int readSelection(String msg, int min, int max) {
         Scanner scanner = new Scanner(System.in);

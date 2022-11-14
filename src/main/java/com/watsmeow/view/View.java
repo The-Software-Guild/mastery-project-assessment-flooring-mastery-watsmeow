@@ -63,6 +63,7 @@ public class View {
         io.print("<<Toodles>>");
     }
 
+    // Display order information for confirmation/editing
     public String displayOrderInformation(Order order) {
         String orderInfo = String.format(" Order Date: %s,\n Order Number: %s,\n Customer Name: %s,\n State: %s,\n" +
                         " Tax Rate: $%s,\n Product Type: %s,\n Area: %s,\n Cost per Sq Ft: $%s,\n " +
@@ -84,6 +85,7 @@ public class View {
         return orderInfo;
     }
 
+    // Methods to display lists
     public void displayOrderList(List<Order> orderList) {
         for (Order currentOrder : orderList) {
             String orderInfo = displayOrderInformation(currentOrder);
@@ -111,6 +113,7 @@ public class View {
         }
     }
 
+    // Confirm or reject an updated or newly created order
     public boolean confirmOrderInformationBanner(Order order) {
         String orderInfo = displayOrderInformation(order);
         io.print(orderInfo);

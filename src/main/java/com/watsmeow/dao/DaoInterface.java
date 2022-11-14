@@ -17,6 +17,8 @@ public interface DaoInterface  {
 
     List<Order> getAllOrders() throws PersistenceException;
 
+    List<TaxInfo> getAllTaxInfo() throws PersistenceException;
+
     /**
      * "Get" singular methods:
      * Retrieves an object based on an abject value
@@ -31,12 +33,10 @@ public interface DaoInterface  {
     Set<Integer> getOrderNumbers();
 
     /**
-     * Method to create a new order
+     * Methods to create a new order or update an existing order
      * @param order is the order being added
      */
     void createNewOrder(Order order) throws PersistenceException;
-
-    List<TaxInfo> getAllTaxInfo() throws PersistenceException;
 
     void updateExistingOrder(Order order) throws PersistenceException;
 
@@ -46,5 +46,8 @@ public interface DaoInterface  {
      */
     void deleteExistingOrder(Order order) throws PersistenceException;
 
+    /**
+     * Method to export all order data to the backup folder
+     */
     void exportAllData() throws PersistenceException;
 }

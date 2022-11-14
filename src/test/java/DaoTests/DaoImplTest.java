@@ -107,7 +107,7 @@ public class DaoImplTest {
     @org.junit.jupiter.api.Test
     public void testTaxInfo() throws Exception {
         TaxInfo garbageTaxInfo = testDao.getTaxInfo("Garbage");
-        TaxInfo testTaxInfo = testDao.getTaxInfo("WA");
+        TaxInfo testTaxInfo = testDao.getTaxInfo("Washington");
         Assertions.assertNull(garbageTaxInfo);
         Assertions.assertNotNull(testTaxInfo);
     }

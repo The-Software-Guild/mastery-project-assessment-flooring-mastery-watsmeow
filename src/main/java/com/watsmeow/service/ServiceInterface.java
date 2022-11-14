@@ -52,5 +52,8 @@ public interface ServiceInterface {
      */
     void saveOrder(Order order) throws PersistenceException;
 
+    /**
+     * Method to export all order data to the backup folder
+     */
     void exportData() throws PersistenceException;
 }
